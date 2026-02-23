@@ -48,7 +48,7 @@ import jakarta.persistence.EntityNotFoundException;
 
         //Assert
         assertEquals(1L, responseDTO.id());
-        assertEquals("joao", responseDTO.firstName());
+        assertEquals("Joao", responseDTO.firstName());
         assertEquals("joao@gmail.com", responseDTO.email());
 
         verify(employeeRepository, times(1)).save(any(Employee.class));
@@ -77,28 +77,30 @@ import jakarta.persistence.EntityNotFoundException;
     }
 
     @Test
-    public void deveLancarQuandoNaoExistir(){ //
+    public void deveLancarQuandoNaoExistir(){ //Quando não existir deve lançar uma resposta de erro 
         EmployeeRequestDTO requestDTO = new EmployeeRequestDTO("joao", "joao@gmail.com");
         
          when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
          // Act + Assert
         assertThrows(EntityNotFoundException.class, () ->
-        employeeService.update(1L, requestDTO)
-    );
+        employeeService.update(1L, requestDTO));
+
            verify(employeeRepository).findById(1L);
 
     }
-    
-    @Test
-    public void deveLancarExcecaoQuandoFuncionarioNaoExiste(){  //teste de erro
 
+    @Test
+    public void deveDeletarUsarioExistente(){ //Vai estar cadastrando um usuário, buscando por ID e deletando ele do sistema
         //Arrange
-       when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
-       assertThrows(EntityNotFoundException.class, () ->
-            employeeService.update(1L, new EmployeeRequestDTO("a", "b"))
-    );
-    
-    }
+        Employee employee = new Employee("Joao", "joao@gmail.com");
+
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        //Act
+         employeeService.delete(1L); 
+        //Assert
+        verify(employeeRepository).findById(1L);
+        verify(employeeRepository).delete(employee);
+    } 
     
 }
