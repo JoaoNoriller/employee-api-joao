@@ -67,7 +67,7 @@ import jakarta.persistence.EntityNotFoundException;
          when(employeeRepository.findById(1L)).thenReturn(Optional.of(employeeSaved)); //Quando o service chama findById(1L) e devolve esse funcionário
 
         //Act
-        EmployeeResponseDTO responseDTO = employeeService.update(1L, requestDTO); // Busca o funcionario no Service com o id(1) e atualiza ele (João)
+        EmployeeResponseDTO responseDTO = employeeService.update(1L, requestDTO); // Busca o funcionário no Service com o id(1) e atualiza ele (João)
 
         //Assert
         assertEquals(1L, responseDTO.id());
@@ -91,7 +91,7 @@ import jakarta.persistence.EntityNotFoundException;
     }
 
     @Test
-    public void deveDeletarUsarioExistente(){ //Vai estar cadastrando um usuário, buscando por ID e deletando ele do sistema
+    public void deveDeletarFuncionarioExistente(){ //Vai estar cadastrando um funcionário, buscando por ID e deletando ele do sistema
         //Arrange
         Employee employee = new Employee("Joao", "joao@gmail.com");
 

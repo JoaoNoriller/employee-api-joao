@@ -1,6 +1,7 @@
 package br.com.tiago.schermack.projeto_teste_automatizado.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,8 +25,7 @@ public class EmployeeServiceIntegracaoTeste {
     @Test
     void deveCriarFuncionarioNoBanco() {
         // Arrenge
-        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO("Joao", "joao@gmail.com"); // Cria usuário dentro
-                                                                                                  // do banco
+        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO("Joao", "joao@gmail.com");                                                                                         // do banco
 
         // Act
         EmployeeResponseDTO responseDTO = employeeService.create(employeeRequestDTO);
@@ -43,18 +43,33 @@ public class EmployeeServiceIntegracaoTeste {
          EmployeeRequestDTO requestDTO = new EmployeeRequestDTO("joao", "joao@gmail.com");  
          Employee employeeSaved = new Employee("pedro", "pedro@gmail");
          
-         employeeRepository.save(employeeSaved); //Vou estar salvando meu novo usuário
+         employeeRepository.save(employeeSaved); //Vou estar salvando meu novo funcionário
 
          employeeRepository.findById(employeeSaved.getId());
 
         //Act
-        EmployeeResponseDTO responseDTO = employeeService.update(employeeSaved.getId(), requestDTO); // Busca o funcionario no Service com o id e atualiza ele
+        EmployeeResponseDTO responseDTO = employeeService.update(employeeSaved.getId(), requestDTO); // Busca o funcionário no Service com o id e atualiza ele
 
         //Assert
         assertEquals(1L, responseDTO.id());
         assertEquals("joao", responseDTO.firstName());
         assertEquals("joao@gmail.com", responseDTO.email());
 
+    }
+
+    @Test
+    public void deveDeletarFuncionario(){
+        // Arrange
+        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO("Joao", "joao@gmail.com");                                                                                         // do banco
+        EmployeeResponseDTO responseDTO = employeeService.create(employeeRequestDTO);
+        
+        //Act
+        employeeService.delete(responseDTO.id());                                                   
+
+        Employee responseUpdated = employeeRepository.findById(responseDTO.id()).orElse(null);
+        
+        //Assert
+        assertNull(responseUpdated);
     }
 
 }
